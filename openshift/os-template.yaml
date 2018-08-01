@@ -92,7 +92,7 @@ objects:
           deploymentconfig: ${APP_NAME}
       spec:
         containers:
-        - image: spring-boot-demo/${APP_NAME}
+        - image: docker-registry.default.svc:5000/${PROJECT_NAME}/${APP_NAME}:latest
           imagePullPolicy: Always
           name: openshift-demo
           ports:
@@ -116,9 +116,12 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${APP_NAME}:latest
-          namespace: spring-boot-demo
+          namespace: ${PROJECT_NAME}
       type: ImageChange    
 parameters:
 - name: APP_NAME
   generate: expression
   from: "simple-spring-app-[0-9]{2}"
+- name: PROJECT_NAME
+  generate: expression
+  from: "java-demo"
