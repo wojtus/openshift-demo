@@ -94,7 +94,7 @@ objects:
         containers:
         - image: docker-registry.default.svc:5000/${PROJECT_NAME}/${APP_NAME}:latest
           imagePullPolicy: Always
-          name: openshift-demo
+          name: ${APP_NAME}
           ports:
           - containerPort: 8080
             protocol: TCP
