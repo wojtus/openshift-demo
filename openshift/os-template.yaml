@@ -51,6 +51,12 @@ objects:
       app: ${APP_NAME}
     name: ${APP_NAME}
 - apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: springboot-maven3-centos
+  spec:
+    dockerImageRepository: codecentric/springboot-maven3-centos
+- apiVersion: v1
   kind: DeploymentConfig
   metadata:
     annotations:
