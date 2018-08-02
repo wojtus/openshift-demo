@@ -1,5 +1,7 @@
 package spectum.openshiftdemo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -15,6 +17,8 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 public class Config {
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Bean
 	public RouterFunction<ServerResponse> route() {
@@ -32,10 +36,12 @@ public class Config {
 	}
 
 	private Mono<ServerResponse> ready(ServerRequest request) {
+		logger.info("Ready check");
 		return ServerResponse.ok().build();
 	}
 
 	private Mono<ServerResponse> alive(ServerRequest request) {
+		logger.info("alive check");
 		return ServerResponse.ok().build();
 	}
 
