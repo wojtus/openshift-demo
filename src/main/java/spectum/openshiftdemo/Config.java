@@ -36,12 +36,12 @@ public class Config {
 	}
 
 	private Mono<ServerResponse> ready(ServerRequest request) {
-		logger.info("Ready check");
+		logger.debug("Ready check");
 		return ServerResponse.ok().build();
 	}
 
 	private Mono<ServerResponse> alive(ServerRequest request) {
-		logger.info("alive check");
+		logger.debug("alive check");
 		return ServerResponse.ok().build();
 	}
 
