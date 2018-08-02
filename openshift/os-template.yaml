@@ -12,7 +12,16 @@ parameters:
   from: "simple-spring-app-[0-9]{2}"
 - name: PROJECT_NAME
   generate: expression
-  from: "java-demo"  
+  from: "java-demo"
+- name: MONGODB_USER
+  generate: expression
+  from: "mongodb"
+- name: MONGODB_PASSWORD
+  generate: expression
+  from: "mongodb"
+- name: MONGODB_ADMIN_PASSWORD
+  generate: expression
+  from: "mongodb"
 objects:
 ###########
 # buildConfig
