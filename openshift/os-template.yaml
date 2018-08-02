@@ -108,7 +108,7 @@ objects:
         creationTimestamp: null
         labels:
           app: ${APP_NAME}
-          deploymentconfig: ${APP_NAME}
+          deploymentconfig: ${APP_NAME}          
       spec:
         containers:
         - image: docker-registry.default.svc:5000/${PROJECT_NAME}/${APP_NAME}:latest
@@ -137,3 +137,18 @@ objects:
           name: ${APP_NAME}:latest
           namespace: ${PROJECT_NAME}
       type: ImageChange
+###########
+# Service
+###########   
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${APP_NAME}    
+  spec:
+    selector:                  
+      app: ${APP_NAME}
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
