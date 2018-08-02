@@ -3,7 +3,20 @@ kind: Template
 metadata:
   creationTimestamp: null
   name: simple-spring-app-template
+###########
+# params
+###########          
+parameters:
+- name: APP_NAME
+  generate: expression
+  from: "simple-spring-app-[0-9]{2}"
+- name: PROJECT_NAME
+  generate: expression
+  from: "java-demo"  
 objects:
+###########
+# buildConfig
+###########
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -40,6 +53,9 @@ objects:
       type: ImageChange      
   status:
     lastVersion: 0
+###########
+# ImageStreams
+###########    
 - apiVersion: v1
   kind: ImageStream
   metadata:
@@ -56,6 +72,9 @@ objects:
     name: springboot-maven3-centos
   spec:
     dockerImageRepository: codecentric/springboot-maven3-centos
+###########
+# DeploymentConfig
+###########    
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -117,11 +136,4 @@ objects:
           kind: ImageStreamTag
           name: ${APP_NAME}:latest
           namespace: ${PROJECT_NAME}
-      type: ImageChange    
-parameters:
-- name: APP_NAME
-  generate: expression
-  from: "simple-spring-app-[0-9]{2}"
-- name: PROJECT_NAME
-  generate: expression
-  from: "java-demo"
+      type: ImageChange
