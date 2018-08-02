@@ -143,7 +143,9 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: ${APP_NAME}    
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}    
   spec:
     selector:                  
       app: ${APP_NAME}
@@ -152,3 +154,19 @@ objects:
       port: 8080
       targetPort: 8080
       protocol: TCP
+###########
+# Route
+###########     
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: 'true'
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}    
+  spec:
+    #host: ${APP_NAME}-{PROJECT_NAME}.192.168.42.85.nip.io
+    to:
+      kind: Service
+      name: ${APP_NAME}      
