@@ -11,7 +11,8 @@ public class Person {
 
 	@Id
 	private String id;
-	private String name;
+	private String forename;
+	private String surname;
 	private LocalDate birthDate;
 	private List<String> citiesOfLiving;
 
@@ -23,12 +24,12 @@ public class Person {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getForename() {
+		return forename;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setForename(String name) {
+		forename = name;
 	}
 
 	public LocalDate getBirthDate() {
@@ -45,6 +46,14 @@ public class Person {
 
 	public void setCitiesOfLiving(List<String> citiesOfLiving) {
 		this.citiesOfLiving = citiesOfLiving;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 }

@@ -22,14 +22,14 @@ public class PersonRepositoryTest {
 	@Test
 	public void testSave() throws Exception {
 		Person entity = new Person();
-		entity.setName("ME");
+		entity.setForename("ME");
 
 		personRepository.save(entity).block();
 
 		Flux<Person> persons = personRepository.findAll();
 
 		StepVerifier.create(persons).assertNext(person -> {
-			assertEquals("ME", person.getName());
+			assertEquals("ME", person.getForename());
 			assertNotNull(person.getId());
 		}).expectComplete().verify();
 
