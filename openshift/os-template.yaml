@@ -128,6 +128,17 @@ objects:
           - containerPort: 8080
             protocol: TCP
           resources: {}
+          env:
+            - name: MONGODB_USER
+              value: ${MONGODB_USER}
+            - name: MONGODB_PASSWORD
+              value: ${MONGODB_PASSWORD}
+            - name: MONGODB_HOST
+              value: ${MONGODB_HOST}
+            - name: MONGODB_PORT
+              value: ${MONGODB_PORT}              
+            - name: MONGODB_DATABASE
+              value: ${APP_NAME}           
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           readinessProbe:
