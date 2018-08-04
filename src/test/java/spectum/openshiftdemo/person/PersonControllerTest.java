@@ -26,4 +26,10 @@ public class PersonControllerTest {
 				exchange().expectStatus().isOk();
 	}
 
+	@Test
+	public void testGetInitPersons() throws Exception {
+		webClient.get().uri("/person/init").accept(MediaType.APPLICATION_JSON).//
+				exchange().expectStatus().isOk();
+	}
+
 }

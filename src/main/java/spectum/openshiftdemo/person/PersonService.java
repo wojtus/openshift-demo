@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
@@ -29,6 +30,7 @@ class PersonService {
 
 	private final Clock clock;
 
+	@Autowired
 	PersonService(PersonRepository personRepository) {
 		this(personRepository, Clock.systemDefaultZone());
 
@@ -43,10 +45,11 @@ class PersonService {
 		return personRepository.findAll();
 	}
 
-	void initPersons() {
-		Stream<Person> personStream = Stream.generate(this::createRandomPerson).limit(1000);
+	Flux<Person> initPersons() {
+		Stream<Person> personStream = Stream.generate(this::createRandomPerson).limit(10);
 		Publisher<Person> personPublisher = Flux.fromStream(personStream);
-		personRepository.saveAll(personPublisher);
+		Flux<Person> all = personRepository.saveAll(personPublisher);
+		return all;
 	}
 
 	private Person createRandomPerson() {

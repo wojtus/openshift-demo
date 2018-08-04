@@ -22,4 +22,10 @@ class PersonController {
 
 	}
 
+	@GetMapping("/init")
+	Flux<Person> getInitPersons() {
+		return personService.initPersons();
+
+	}
+
 }
