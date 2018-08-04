@@ -134,9 +134,9 @@ objects:
             - name: MONGODB_PASSWORD
               value: ${MONGODB_PASSWORD}
             - name: MONGODB_HOST
-              value: ${MONGODB_HOST}
+              value: ${APP_NAME}-mongodb
             - name: MONGODB_PORT
-              value: ${MONGODB_PORT}              
+              value: "27017"
             - name: MONGODB_DATABASE
               value: ${APP_NAME}           
           terminationMessagePath: /dev/termination-log
