@@ -138,7 +138,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${APP_NAME}
-                  key: password
+                  key: mongodb-password
             - name: MONGODB_HOST
               value: ${APP_NAME}-mongodb
             - name: MONGODB_PORT
@@ -231,9 +231,12 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${APP_NAME}
-                  key: password
+                  key: mongodb-password
             - name: MONGODB_ADMIN_PASSWORD
-              value: ${MONGODB_ADMIN_PASSWORD}
+              valueFrom:
+                secretKeyRef:
+                  name: ${APP_NAME}
+                  key: mongodb-admin-password
             - name: MONGODB_DATABASE
               value: ${APP_NAME}
           resources: {}
@@ -316,6 +319,9 @@ objects:
   kind: Secret
   metadata:
     name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}    
   stringData:
     mongodb-username: ${MONGODB_USER}
-    password: ${MONGODB_PASSWORD} 
+    mongodb-password: ${MONGODB_PASSWORD} 
+    mongodb-admin-password: ${MONGODB_ADMIN_PASSWORD}
