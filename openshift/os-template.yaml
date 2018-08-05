@@ -146,7 +146,7 @@ objects:
             - name: MONGODB_DATABASE
               value: ${APP_NAME}
             - name: SPRING_PROFILES_ACTIVE
-              value: openshift                
+              value: openshift                       
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           readinessProbe:
@@ -215,12 +215,19 @@ objects:
           component: mongodb
           deploymentconfig: ${APP_NAME}-mongodb      
       spec:
+        volumes:
+          - name: mongodb-data
+            persistentVolumeClaim:
+              claimName: ${APP_NAME}      
         containers:
         - image: centos/mongodb-32-centos7:latest
           name: ${APP_NAME}-mongodb
           ports:
           - containerPort: 27017
             protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/mongodb/data
+              name: mongodb-data
           env:
             - name: MONGODB_USER
               valueFrom:
@@ -325,3 +332,18 @@ objects:
     mongodb-username: ${MONGODB_USER}
     mongodb-password: ${MONGODB_PASSWORD} 
     mongodb-admin-password: ${MONGODB_ADMIN_PASSWORD}
+###########
+# Persistent Volume
+###########
+- apiVersion: "v1"
+  kind: "PersistentVolumeClaim"
+  metadata:
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}  
+  spec:
+    accessModes:
+      - "ReadWriteMany"
+    resources:
+      requests:
+        storage: "3Gi"
