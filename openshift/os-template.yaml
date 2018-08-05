@@ -133,7 +133,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${APP_NAME}
-                  key: username
+                  key: mongodb-username
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -226,7 +226,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${APP_NAME}
-                  key: username
+                  key: mongodb-username
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -317,5 +317,5 @@ objects:
   metadata:
     name: ${APP_NAME}
   stringData:
-    username: ${MONGODB_USER}
+    mongodb-username: ${MONGODB_USER}
     password: ${MONGODB_PASSWORD} 
