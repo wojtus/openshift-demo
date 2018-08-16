@@ -20,11 +20,11 @@ import reactor.core.publisher.Flux;
 @Service
 class PersonService {
 
-	private final static List<String> CITIES = Arrays.asList("Berlin", "Hamburg", "München", "Köln",
+	private static final List<String> CITIES = Arrays.asList("Berlin", "Hamburg", "München", "Köln",
 			"Frankfurt am Main", "Stuttgart", "Düsseldorf", "Dortmund", "Essen", "Leipzig");
-	private final static List<String> FORENAMES = Arrays.asList("Mia", "Ben", "Emma", "Jonas", "Hannah", "Leon",
+	private static final List<String> FORENAMES = Arrays.asList("Mia", "Ben", "Emma", "Jonas", "Hannah", "Leon",
 			"Sophia", "Elias", "Anna", "Fynn");
-	private final static List<String> SURNAMES = Arrays.asList("Müller", "Schmidt", "Schneider", "Fischer", "Weber",
+	private static final List<String> SURNAMES = Arrays.asList("Müller", "Schmidt", "Schneider", "Fischer", "Weber",
 			"Meyer", "Wagner", "Becker", "Schulz", "Hoffmann");
 	private final PersonRepository personRepository;
 
@@ -99,7 +99,7 @@ class PersonService {
 	}
 
 	<T> T getRandomValue(List<T> list) {
-		double stdev = list.size() / 2;
+		double stdev = (double) list.size() / 2;
 		int randomIndex = (int) Math.abs(ThreadLocalRandom.current().nextGaussian() * stdev);
 		int index = Math.min(randomIndex, list.size() - 1);
 		T value = list.get(index);
