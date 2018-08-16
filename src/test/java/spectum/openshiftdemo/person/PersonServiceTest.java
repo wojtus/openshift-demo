@@ -16,8 +16,10 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.reactivestreams.Publisher;
 
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -28,6 +30,7 @@ public class PersonServiceTest {
 	private final LocalDate referenceDate = LocalDate.of(2000, 1, 1);
 	private final Clock clock = Clock.fixed(referenceDate.atStartOfDay().atZone(DEFAULT_TIME_ZONE).toInstant(),
 			DEFAULT_TIME_ZONE);
+	private final Person testPerson = new Person();
 
 	@Mock
 	private PersonRepository personRepository;
@@ -41,7 +44,6 @@ public class PersonServiceTest {
 
 	@Test
 	public void testGetPersons() throws Exception {
-		Person testPerson = new Person();
 		when(personRepository.findAll()).thenReturn(Flux.just(testPerson));
 		Flux<Person> persons = personService.getPersons();
 		StepVerifier.create(persons).assertNext(person -> {
@@ -80,6 +82,22 @@ public class PersonServiceTest {
 		LocalDate birthDate = LocalDate.of(1970, 6, 1);
 		List<String> citiesOfLiving = personService.getRandomCitiesOfLiving(birthDate);
 		assertNotNull(citiesOfLiving);
+	}
+
+	@Test
+	public void testInitPersons() throws Exception {
+		when(personRepository.saveAll(ArgumentMatchers.<Publisher<Person>>any())).//
+				thenReturn(Flux.just(testPerson));
+
+		Flux<Person> persons = personService.initPersons();
+		StepVerifier.create(persons).//
+				expectNext(testPerson).//
+				expectComplete().verify();
+	}
+
+	@Test
+	public void testCreateRandomPerson() throws Exception {
+		assertNotNull(personService.createRandomPerson());
 	}
 
 }

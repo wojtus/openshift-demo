@@ -52,7 +52,7 @@ class PersonService {
 		return all;
 	}
 
-	private Person createRandomPerson() {
+	Person createRandomPerson() {
 		String forename = getRandomForename();
 		String surname = getRandomSurname();
 		LocalDate birthDate = getRandomBirthDate();
