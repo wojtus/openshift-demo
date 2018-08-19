@@ -23,6 +23,7 @@ import org.reactivestreams.Publisher;
 
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+import spectum.openshiftdemo.similarity.SimilarityFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
@@ -34,12 +35,14 @@ public class PersonServiceTest {
 
 	@Mock
 	private PersonRepository personRepository;
+	@Mock
+	private SimilarityFinder similarityFinder;
 
 	private PersonService personService;
 
 	@Before
 	public void initService() {
-		personService = new PersonService(personRepository, clock);
+		personService = new PersonService(personRepository, similarityFinder, clock);
 	}
 
 	@Test

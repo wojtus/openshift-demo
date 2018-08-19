@@ -6,9 +6,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.springframework.stereotype.Component;
 
 import spectum.openshiftdemo.person.Person;
 
+@Component
 class DefaultPairDistance implements PairDistance {
 
 	@Override

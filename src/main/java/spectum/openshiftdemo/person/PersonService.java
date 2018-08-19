@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
+import spectum.openshiftdemo.similarity.SimilarPair;
+import spectum.openshiftdemo.similarity.SimilarityFinder;
 
 @Service
 class PersonService {
@@ -29,20 +32,29 @@ class PersonService {
 	private final PersonRepository personRepository;
 
 	private final Clock clock;
+	private final SimilarityFinder similarityFinder;
 
 	@Autowired
-	PersonService(PersonRepository personRepository) {
-		this(personRepository, Clock.systemDefaultZone());
+	PersonService(PersonRepository personRepository, SimilarityFinder similarityFinder) {
+		this(personRepository, similarityFinder, Clock.systemDefaultZone());
 
 	}
 
-	PersonService(PersonRepository personRepository, Clock clock) {
+	PersonService(PersonRepository personRepository, SimilarityFinder similarityFinder, Clock clock) {
 		this.personRepository = personRepository;
 		this.clock = clock;
+		this.similarityFinder = similarityFinder;
 	}
 
 	Flux<Person> getPersons() {
 		return personRepository.findAll();
+	}
+
+	Flux<SimilarPair> getSimlarPersons() {
+		Flux<Person> all = personRepository.findAll();
+		Flux<SimilarPair> similarPairs = all.collectList().map(similarityFinder::getSimilarPairs)
+				.flatMapIterable(Function.identity());
+		return similarPairs;
 	}
 
 	Flux<Person> initPersons() {

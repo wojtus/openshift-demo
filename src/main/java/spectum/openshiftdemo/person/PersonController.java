@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import reactor.core.publisher.Flux;
+import spectum.openshiftdemo.similarity.SimilarPair;
 
 @RestController
 @RequestMapping("/person")
@@ -25,6 +26,12 @@ class PersonController {
 	@GetMapping("/init")
 	Flux<Person> getInitPersons() {
 		return personService.initPersons();
+
+	}
+
+	@GetMapping("/similarity")
+	Flux<SimilarPair> getSimilarPersons() {
+		return personService.getSimlarPersons();
 
 	}
 

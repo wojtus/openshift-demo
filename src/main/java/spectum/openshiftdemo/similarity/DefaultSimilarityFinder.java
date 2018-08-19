@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.stereotype.Component;
+
 import com.google.common.annotations.VisibleForTesting;
 
 import spectum.openshiftdemo.person.Person;
 
+@Component
 class DefaultSimilarityFinder implements SimilarityFinder {
 
 	private final PairDistance pairDistance;
