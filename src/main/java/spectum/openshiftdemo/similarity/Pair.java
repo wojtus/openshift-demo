@@ -1,4 +1,6 @@
-package spectum.openshiftdemo.person;
+package spectum.openshiftdemo.similarity;
+
+import spectum.openshiftdemo.person.Person;
 
 class Pair {
 

@@ -1,4 +1,4 @@
-package spectum.openshiftdemo.person;
+package spectum.openshiftdemo.similarity;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,9 +8,11 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 
-public class DefaultPersonDistanceTest {
+import spectum.openshiftdemo.person.Person;
 
-	private DefaultPersonDistance defaultPersonDistance = new DefaultPersonDistance();
+public class DefaultPairDistanceTest {
+
+	private DefaultPairDistance defaultPersonDistance = new DefaultPairDistance();
 
 	@Test
 	public void testApply() throws Exception {

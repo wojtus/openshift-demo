@@ -1,4 +1,4 @@
-package spectum.openshiftdemo.person;
+package spectum.openshiftdemo.similarity;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -7,7 +7,9 @@ import java.util.function.Supplier;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
-class DefaultPersonDistance implements PersonDistance {
+import spectum.openshiftdemo.person.Person;
+
+class DefaultPairDistance implements PairDistance {
 
 	@Override
 	public Integer apply(Pair pair) {
