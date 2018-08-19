@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -13,19 +14,29 @@ import spectum.openshiftdemo.person.Person;
 
 class DefaultSimilarityFinder implements SimilarityFinder {
 
+	private final PairDistance pairDistance;
+
+	DefaultSimilarityFinder(PairDistance pairDistance) {
+		this.pairDistance = pairDistance;
+	}
+
 	@Override
 	public List<SimilarPair> getSimilarPairs(Collection<Person> persons) {
 		Collection<Pair> allPairs = getAllPairs(persons);
-		Collection<SimilarPair> similarPairs = createSimilarPairs(allPairs);
-		List<SimilarPair> similarPairsList = similarPairs.stream().//
+		Stream<SimilarPair> similarPairs = createSimilarPairs(allPairs);
+		List<SimilarPair> similarPairsList = similarPairs.//
 				sorted(Comparator.comparingInt(SimilarPair::getSimilarity)).//
 				collect(Collectors.toList());
 		return Collections.unmodifiableList(similarPairsList);
 	}
 
-	private Collection<SimilarPair> createSimilarPairs(Collection<Pair> allPairs) {
-		// TODO Auto-generated method stub
-		return null;
+	private Stream<SimilarPair> createSimilarPairs(Collection<Pair> allPairs) {
+		return allPairs.stream().map(this::createSimilarPair);
+	}
+
+	private SimilarPair createSimilarPair(Pair pair) {
+		Integer similarity = pairDistance.apply(pair);
+		return new SimilarPair(pair.getPersonA(), pair.getPersonB(), similarity);
 	}
 
 	@VisibleForTesting
