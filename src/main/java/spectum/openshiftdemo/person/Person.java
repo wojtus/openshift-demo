@@ -3,6 +3,8 @@ package spectum.openshiftdemo.person;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -54,6 +56,12 @@ public class Person {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	@Override
+	public String toString() {
+		String toString = ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		return toString;
 	}
 
 }
