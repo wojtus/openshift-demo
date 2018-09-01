@@ -28,8 +28,7 @@ class DefaultPairDistance implements PairDistance {
 
 	private Integer cityDistance(Pair pair) {
 		BiFunction<List<String>, List<String>, Integer> distanceFunction = this::jaccardDistance;
-		Integer distance = propertyDistance(pair, Person::getCitiesOfLiving, distanceFunction,
-				() -> Collections.emptyList());
+		Integer distance = propertyDistance(pair, Person::getCitiesOfLiving, distanceFunction, Collections::emptyList);
 		return distance;
 	}
 
