@@ -6,7 +6,7 @@ public class SimilarPair extends Pair {
 
 	private final Integer similarity;
 
-	SimilarPair(Person personA, Person personB, Integer similarity) {
+	public SimilarPair(Person personA, Person personB, Integer similarity) {
 		super(personA, personB);
 		this.similarity = similarity;
 	}
