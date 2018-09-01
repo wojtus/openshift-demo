@@ -9,6 +9,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ import org.reactivestreams.Publisher;
 
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+import spectum.openshiftdemo.similarity.SimilarPair;
 import spectum.openshiftdemo.similarity.SimilarityFinder;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -101,6 +103,22 @@ public class PersonServiceTest {
 	@Test
 	public void testCreateRandomPerson() throws Exception {
 		assertNotNull(personService.createRandomPerson());
+	}
+
+	@Test
+	public void testGetSimlarPersons() throws Exception {
+		Person personA = new Person();
+		Person personB = new Person();
+		SimilarPair similarPair = new SimilarPair(personA, personB, Integer.valueOf(1));
+		when(personRepository.findAll()).thenReturn(Flux.just(personA, personB));
+		when(similarityFinder.getSimilarPairs(ArgumentMatchers.anyCollection()))
+				.thenReturn(Collections.singletonList(similarPair));
+		Flux<SimilarPair> simlarPersons = personService.getSimlarPersons();
+
+		StepVerifier.create(simlarPersons).//
+				expectNext(similarPair).//
+				expectComplete().verify();
+
 	}
 
 }
