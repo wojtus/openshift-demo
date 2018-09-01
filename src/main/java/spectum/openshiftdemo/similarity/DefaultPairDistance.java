@@ -1,6 +1,11 @@
 package spectum.openshiftdemo.similarity;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -17,7 +22,15 @@ class DefaultPairDistance implements PairDistance {
 	public Integer apply(Pair pair) {
 		Integer foreNameDistance = foreNameDistance(pair);
 		Integer secondNameDistance = surnameDistance(pair);
-		return foreNameDistance + secondNameDistance;
+		Integer cityDistance = cityDistance(pair) / 10;
+		return foreNameDistance + secondNameDistance + cityDistance;
+	}
+
+	private Integer cityDistance(Pair pair) {
+		BiFunction<List<String>, List<String>, Integer> distanceFunction = this::jaccardDistance;
+		Integer distance = propertyDistance(pair, Person::getCitiesOfLiving, distanceFunction,
+				() -> Collections.emptyList());
+		return distance;
 	}
 
 	Integer surnameDistance(Pair pair) {
@@ -27,6 +40,19 @@ class DefaultPairDistance implements PairDistance {
 
 	Integer foreNameDistance(Pair pair) {
 		Integer distance = stringDistance(pair, Person::getForename);
+		return distance;
+	}
+
+	<T> Integer jaccardDistance(Collection<T> citiesA, Collection<T> citiesB) {
+		Set<T> intersection = new HashSet<>(citiesA);
+		Set<T> citiesBSet = new HashSet<>(citiesB);
+		intersection.retainAll(citiesBSet);
+
+		Set<T> union = new HashSet<>();
+		union.addAll(citiesA);
+		union.addAll(citiesB);
+
+		Integer distance = 100 * intersection.size() / union.size();
 		return distance;
 	}
 

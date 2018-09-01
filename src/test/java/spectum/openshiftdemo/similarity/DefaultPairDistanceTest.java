@@ -2,6 +2,7 @@ package spectum.openshiftdemo.similarity;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,13 +20,15 @@ public class DefaultPairDistanceTest {
 		Person personA = new Person();
 		personA.setForename("Max");
 		personA.setSurname("Kowalski");
+		personA.setCitiesOfLiving(Arrays.asList("Berlin", "Frankfurt"));
 		Person personB = new Person();
 		personB.setForename("Maxi");
 		personB.setSurname("Kowal");
+		personB.setCitiesOfLiving(Arrays.asList("Berlin"));
 		Pair pair = new Pair(personA, personB);
 
 		Integer distance = defaultPersonDistance.apply(pair);
-		assertEquals(4, distance.intValue());
+		assertEquals(9, distance.intValue());
 	}
 
 	@Test
@@ -80,6 +83,15 @@ public class DefaultPairDistanceTest {
 		consumerB.accept(valueB);
 		Pair pair = new Pair(personA, personB);
 		return pair;
+	}
+
+	@Test
+	public void testJaccardDistance() throws Exception {
+		assertEquals(0, defaultPersonDistance.jaccardDistance(Arrays.asList("A"), Arrays.asList("B")).intValue());
+		assertEquals(100, defaultPersonDistance.jaccardDistance(Arrays.asList("A"), Arrays.asList("A")).intValue());
+		assertEquals(50, defaultPersonDistance.jaccardDistance(Arrays.asList("A", "B"), Arrays.asList("A")).intValue());
+		assertEquals(33,
+				defaultPersonDistance.jaccardDistance(Arrays.asList("A", "B"), Arrays.asList("A", "C")).intValue());
 	}
 
 }
