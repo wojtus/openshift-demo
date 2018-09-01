@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,8 +51,7 @@ class PersonService {
 
 	Flux<SimilarPair> getSimlarPersons() {
 		Flux<Person> all = personRepository.findAll();
-		Flux<SimilarPair> similarPairs = all.collectList().map(similarityFinder::getSimilarPairs)
-				.flatMapIterable(Function.identity());
+		Flux<SimilarPair> similarPairs = similarityFinder.getSimilarPairs(all);
 		return similarPairs;
 	}
 

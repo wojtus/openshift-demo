@@ -9,7 +9,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -111,8 +110,7 @@ public class PersonServiceTest {
 		Person personB = new Person();
 		SimilarPair similarPair = new SimilarPair(personA, personB, Integer.valueOf(1));
 		when(personRepository.findAll()).thenReturn(Flux.just(personA, personB));
-		when(similarityFinder.getSimilarPairs(ArgumentMatchers.anyCollection()))
-				.thenReturn(Collections.singletonList(similarPair));
+		when(similarityFinder.getSimilarPairs(ArgumentMatchers.any())).thenReturn(Flux.just(similarPair));
 		Flux<SimilarPair> simlarPersons = personService.getSimlarPersons();
 
 		StepVerifier.create(simlarPersons).//

@@ -1,17 +1,17 @@
 package spectum.openshiftdemo.similarity;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import spectum.openshiftdemo.person.Person;
 
 @Component
@@ -24,17 +24,16 @@ class DefaultSimilarityFinder implements SimilarityFinder {
 	}
 
 	@Override
-	public List<SimilarPair> getSimilarPairs(Collection<Person> persons) {
-		Collection<Pair> allPairs = getAllPairs(persons);
-		Stream<SimilarPair> similarPairs = createSimilarPairs(allPairs);
-		List<SimilarPair> similarPairsList = similarPairs.//
-				sorted(Comparator.comparingInt(SimilarPair::getSimilarity)).//
-				collect(Collectors.toList());
-		return Collections.unmodifiableList(similarPairsList);
+	public Flux<SimilarPair> getSimilarPairs(Flux<Person> persons) {
+		Flux<Pair> allPairs = getAllPairs(persons);
+		Flux<SimilarPair> similarPairs = createSimilarPairs(allPairs);
+		Flux<SimilarPair> sortedSimilarPairs = similarPairs.//
+				sort(Comparator.comparingInt(SimilarPair::getSimilarity));
+		return sortedSimilarPairs;
 	}
 
-	private Stream<SimilarPair> createSimilarPairs(Collection<Pair> allPairs) {
-		return allPairs.stream().map(this::createSimilarPair);
+	private Flux<SimilarPair> createSimilarPairs(Flux<Pair> allPairs) {
+		return allPairs.map(this::createSimilarPair);
 	}
 
 	private SimilarPair createSimilarPair(Pair pair) {
@@ -43,6 +42,12 @@ class DefaultSimilarityFinder implements SimilarityFinder {
 	}
 
 	@VisibleForTesting
+	Flux<Pair> getAllPairs(Flux<Person> persons) {
+		Mono<List<Person>> personList = persons.collectList();
+		Flux<Pair> flux = personList.map(this::getAllPairs).flatMapIterable(Function.identity());
+		return flux;
+	}
+
 	Collection<Pair> getAllPairs(Collection<Person> persons) {
 		Person[] personArray = persons.toArray(new Person[] {});
 		Collection<Pair> pairs = new LinkedList<>();
@@ -55,6 +60,7 @@ class DefaultSimilarityFinder implements SimilarityFinder {
 			}
 		}
 		return pairs;
+
 	}
 
 }

@@ -1,9 +1,5 @@
 package spectum.openshiftdemo.similarity;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 import spectum.openshiftdemo.person.Person;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,9 +25,9 @@ public class DefaultSimilarityFinderTest {
 
 	@Test
 	public void testGetSimilarPairs() throws Exception {
-		Collection<Person> personsAB = createTestPersons(1, 2, 3, 4);
-		List<SimilarPair> similarPairs = defaultSimilarityFinder.getSimilarPairs(personsAB);
-		assertEquals(6, similarPairs.size());
+		Flux<Person> personsAB = createTestPersons(1, 2, 3, 4);
+		Flux<SimilarPair> similarPairs = defaultSimilarityFinder.getSimilarPairs(personsAB);
+		StepVerifier.create(similarPairs).expectNextCount(6).expectComplete().verify();
 	}
 
 	Integer getIdDistanance(Pair pair) {
@@ -40,21 +38,21 @@ public class DefaultSimilarityFinderTest {
 
 	@Test
 	public void testGetAllPairs() throws Exception {
-		Collection<Person> personsAB = createTestPersons(1, 2);
-		Collection<Pair> allPairsAB = defaultSimilarityFinder.getAllPairs(personsAB);
-		assertEquals(1, allPairsAB.size());
+		Flux<Person> personsAB = createTestPersons(1, 2);
+		Flux<Pair> allPairsAB = defaultSimilarityFinder.getAllPairs(personsAB);
+		StepVerifier.create(allPairsAB).expectNextCount(1).expectComplete().verify();
 
-		Collection<Person> personsABC = createTestPersons(1, 2, 3);
-		Collection<Pair> allPairsABC = defaultSimilarityFinder.getAllPairs(personsABC);
-		assertEquals(3, allPairsABC.size());
+		Flux<Person> personsABC = createTestPersons(1, 2, 3);
+		Flux<Pair> allPairsABC = defaultSimilarityFinder.getAllPairs(personsABC);
+		StepVerifier.create(allPairsABC).expectNextCount(3).expectComplete().verify();
 
-		Collection<Person> personsABCD = createTestPersons(1, 2, 3, 4);
-		Collection<Pair> allPairsABCD = defaultSimilarityFinder.getAllPairs(personsABCD);
-		assertEquals(6, allPairsABCD.size());
+		Flux<Person> personsABCD = createTestPersons(1, 2, 3, 4);
+		Flux<Pair> allPairsABCD = defaultSimilarityFinder.getAllPairs(personsABCD);
+		StepVerifier.create(allPairsABCD).expectNextCount(6).expectComplete().verify();
 
 	}
 
-	private List<Person> createTestPersons(int... values) {
+	private Flux<Person> createTestPersons(int... values) {
 		List<Person> persons = new LinkedList<>();
 		for (int i = 0; i < values.length; i++) {
 			Person p = new Person();
@@ -62,7 +60,7 @@ public class DefaultSimilarityFinderTest {
 			p.setId(id);
 			persons.add(p);
 		}
-		return Collections.unmodifiableList(persons);
+		return Flux.fromIterable(persons);
 	}
 
 }
